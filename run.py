@@ -1,20 +1,21 @@
-## import dependencies to use Google Sheets API and manipulate data within the sheet.
+# import dependencies to use Google Sheets API and manipulate data within the sheet.
 import gspread
 from google.oauth2.service_account import Credentials
 from pprint import pprint
 
-## State APIs application will have access to.
+# State APIs application will have access to.
 SCOPE = [
     "https://www.googleapis.com/auth/spreadsheets",
     "https://www.googleapis.com/auth/drive.file",
     "https://www.googleapis.com/auth/drive"
     ]
 
-## Pass credential information to authentication service, gSpread and gain access to sheet.
+# Pass credential information to authentication service, gSpread and gain access to sheet.
 CREDS = Credentials.from_service_account_file('creds.json')
 SCOPED_CREDS = CREDS.with_scopes(SCOPE)
 GSPREAD_CLIENT = gspread.authorize(SCOPED_CREDS)
 SHEET = GSPREAD_CLIENT.open('love_sandwiches')
+
 
 def get_sales_data():
     """
@@ -32,8 +33,9 @@ def get_sales_data():
         if validate_data(sales_data):
             print("Data is valid!")
             break
-    
+
     return sales_data
+
 
 def validate_data(values):
     """
@@ -50,8 +52,9 @@ def validate_data(values):
     except ValueError as e:
         print(f"Invalid data: {e}, please try again.\n")
         return False
-    
+
     return True
+
 
 def update_sales_worksheet(data):
     """
@@ -61,6 +64,7 @@ def update_sales_worksheet(data):
     sales_worksheet = SHEET.worksheet("sales")
     sales_worksheet.append_row(data)
     print("Sales worksheet updated sucessfully.\n")
+
 
 def calculate_surplus_data(sales_row):
     """
@@ -91,6 +95,7 @@ def main():
     update_sales_worksheet(sales_data)
     new_surplus_data = calculate_surplus_data(sales_data)
     print(new_surplus_data)
+
 
 print("\nWelcome to Love Sandwiches Data Automation\n")
 main()
