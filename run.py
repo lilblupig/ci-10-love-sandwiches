@@ -3,7 +3,9 @@ import gspread
 from google.oauth2.service_account import Credentials
 from pprint import pprint
 
-# State APIs application will have access to.
+# Every Google account has as an IAM (Identity and Access Management)
+# configuration which specifies what the user has access to.
+# The SCOPE lists the APIs that the program should access in order to run.
 SCOPE = [
     "https://www.googleapis.com/auth/spreadsheets",
     "https://www.googleapis.com/auth/drive.file",
@@ -116,6 +118,11 @@ def calculate_stock_data(data):
     return new_stock_data
 
 
+def get_stock_values(data):
+    headings = SHEET.worksheet("sales").row_values(1)
+    return dict(zip(headings, data))
+
+
 def main():
     """
     Run all program functions
@@ -128,6 +135,9 @@ def main():
     sales_columns = get_last_5_entries_sales()
     stock_data = calculate_stock_data(sales_columns)
     update_worksheet(stock_data, "stock")
+    stock_values = get_stock_values(stock_data)
+    print("Make the following numbers of sandwiches for next market:")
+    pprint(stock_values)
 
 
 print("\nWelcome to Love Sandwiches Data Automation\n")
